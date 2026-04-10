@@ -1,0 +1,22 @@
+# Data extracted from the provided genetic pathway diagram
+gene_data = [
+    ["Gene Name", "Category", "Primary Mechanism", "Immune Outcome"],
+    ["MYC", "Oncogene", "PD-L1 up-regulation", "Immune suppression"],
+    ["RAS", "Oncogene", "CD47 up-regulation", "T-cell inhibition"],
+    ["EGFR", "Oncogene", "PD-L1 transcription", "Immune suppression"],
+    ["PIK3CA", "Oncogene", "Immunosuppressive factors in TME", "Inhibits T-cell recruitment"],
+    ["BRAF", "Oncogene", "PD-L1 up-regulation", "Immune evasion"],
+    ["HER2", "Oncogene", "PD-L1 up-regulation", "Reduced T-cell activation"],
+    ["CTNNB1", "Oncogene", "Reduced Dendritic cell recruitment", "Reduced immune response"],
+    ["STAT3", "Oncogene", "PD-L1 and immunosuppressive cytokines", "Immune evasion"],
+    ["PTEN", "Tumor Suppressor", "PI3K activation", "Reduced T-cell infiltration"],
+    ["TP53", "Tumor Suppressor", "PD-L1 up-regulation", "Immunosuppressive environment"],
+    ["RB1", "Tumor Suppressor", "Increased immunosuppressive factors", "Reduced immune cell recruitment"],
+    ["APC", "Tumor Suppressor", "Wnt/beta-catenin pathway activation", "Reduced T-cell infiltration"],
+    ["BRCA1/2", "Tumor Suppressor", "MDSC and Treg recruitment", "Reduced immune response"],
+    ["STK11", "Tumor Suppressor", "Increased immunosuppressive cytokines", "Blocks immune cell infiltration"],
+    ["SMAD4", "Tumor Suppressor", "TGF-beta up-regulation", "Regulatory T-cells and MDSCs recruitment"],
+    ["ATM", "Tumor Suppressor", "Down-regulation of immune pathways", "Reduced DNA-damage-related immune response"]
+]
+
+filename = "cancer_genes_immune_evasion.csv"
