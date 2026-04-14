@@ -1,16 +1,27 @@
 # Exploratory data analysis (EDA) on a cancer dataset
 # Loading the files and exploring the data with pandas
 # %%
+from pathlib import Path
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = BASE_DIR / "data"
 # %%
 # Load the data
 ####################################################
 data = pd.read_csv(
-    '/Users/megansullivan/Desktop/Comp BME/Module-4-Cancer/data/TRAINING_SET_GSE62944_subsample_log2TPM.csv', index_col=0, header=0)  # can also use larger dataset with more genes
+    DATA_DIR / "TRAINING_SET_GSE62944_subsample_log2TPM.csv",
+    index_col=0,
+    header=0,
+)  # can also use larger dataset with more genes
 metadata_df = pd.read_csv(
-    '/Users/megansullivan/Desktop/Comp BME/Module-4-Cancer/data/TRAINING_SET_GSE62944_metadata.csv', index_col=0, header=0)
+    DATA_DIR / "TRAINING_SET_GSE62944_metadata.csv",
+    index_col=0,
+    header=0,
+)
 print(data.head())
 
 # %%
@@ -42,10 +53,27 @@ LUAD_data = data[cancer_samples]
 # %%
 # Subset by index (genes)
 ####################################################
-genes_df = pd.read_csv('/Users/megansullivan/Desktop/Comp BME/Module-4-Cancer/data/immuneevasiongenes.csv')
+# This file is a small text artifact, not a real CSV, so we keep the gene list explicit.
+raw_gene_list = [
+    "MYC",
+    "RAS",
+    "EGFR",
+    "PIK3CA",
+    "BRAF",
+    "HER2",
+    "CTNNB1",
+    "STAT3",
+    "PTEN",
+    "TP53",
+    "RB1",
+    "APC",
+    "BRCA1/2",
+    "STK11",
+    "SMAD4",
+    "ATM",
+]
 
-# Extract gene names. If 'BRCA1/2' is in there, we split it into two.
-raw_gene_list = genes_df['Gene Name'].tolist()
+# Extract gene names. If 'BRCA1/2' is in there, split it into two.
 desired_gene_list = []
 for gene in raw_gene_list:
     if '/' in gene:
@@ -55,7 +83,8 @@ for gene in raw_gene_list:
 
 # .loc[] is the method to subset by index labels
 # .iloc[] will subset by index position (integer location) instead
-LUAD_gene_data = LUAD_data.loc[raw_gene_list]
+available_genes = [gene for gene in desired_gene_list if gene in LUAD_data.index]
+LUAD_gene_data = LUAD_data.loc[available_genes]
 print(LUAD_gene_data.head())
 
 # %%
@@ -99,7 +128,8 @@ plt.title("EGFR Expression by Gender in LUAD Samples")
 plt.show()
 
 # Boxplot of MYC and EGFR expression in LUAD samples using PANDAS directly
-LUAD_merged[['MYC', 'EGFR']].plot.box()
+gene_plot_columns = [gene for gene in ["MYC", "EGFR"] if gene in LUAD_merged.columns]
+LUAD_merged[gene_plot_columns].plot.box()
 plt.title("MYC and EGFR Expression in LUAD Samples")
 plt.show()
 
