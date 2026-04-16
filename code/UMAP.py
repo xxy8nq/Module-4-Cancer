@@ -8,25 +8,15 @@ from sklearn.preprocessing import StandardScaler
 import umap
 
 
-def parse_hallmark_genes(core_file: Path, hallmark_name: str) -> list[str]:
-	"""Parse one hallmark row from the tab-delimited core hallmark file."""
-	with core_file.open("r", encoding="utf-8") as handle:
-		for line in handle:
-			parts = [piece.strip() for piece in line.strip().split("\t") if piece.strip()]
-			if parts and parts[0] == hallmark_name:
-				return list(dict.fromkeys(parts[1:]))
-	return []
-
-
-def resolve_immune_genes(expression_index: pd.Index, immune_raw_genes: list[str]) -> list[str]:
-	"""Map aliases/split genes from the immune list to genes present in expression data."""
+def resolve_genes(expression_index: pd.Index, raw_genes: list[str]) -> list[str]:
+	"""Map aliases/split genes to genes present in expression data."""
 	aliases = {
 		"HER2": ["HER2", "ERBB2"],
 		"RAS": ["KRAS", "HRAS", "NRAS", "RAS"],
 	}
 
 	resolved = []
-	for gene in immune_raw_genes:
+	for gene in raw_genes:
 		if "/" in gene:
 			candidates = gene.split("/")
 		else:
@@ -54,26 +44,25 @@ if target_cancer_type not in metadata_df["cancer_type"].unique():
 
 subset_metadata = metadata_df[metadata_df["cancer_type"] == target_cancer_type].copy()
 
-# Hallmark 1: immune evasion genes from local immune gene file
-immune_namespace = runpy.run_path(str(DATA_DIR / "immuneevasiongenes.csv"))
-immune_raw_genes = [row[0] for row in immune_namespace["gene_data"][1:]]
-immune_genes = resolve_immune_genes(expression_df.index, immune_raw_genes)
+# Hallmark genes loaded directly from the CSV-style python artifact.
+gene_namespace = runpy.run_path(str(DATA_DIR / "immuneevasiongenes.csv"))
+growth_raw_genes = gene_namespace.get("growth_genes", [])
+immune_raw_genes = gene_namespace.get("immune_genes", [])
 
-# Hallmark 2: sustained proliferative signaling genes from core hallmark file
-core_file = BASE_DIR / "Menyhart_JPA_CancerHallmarks_core.txt"
-sustained_all = parse_hallmark_genes(core_file, "SUSTAINING PROLIFERATIVE SIGNALING")
-sustained_available = [gene for gene in sustained_all if gene in expression_df.index]
+if not growth_raw_genes or not immune_raw_genes:
+	raise ValueError(
+		"Expected growth_genes and immune_genes in data/immuneevasiongenes.csv."
+	)
 
-# Keep at least 10 genes from each hallmark; use many sustained genes to exceed 100 total features.
-MAX_SUSTAINED_GENES = 140
-sustained_genes = sustained_available[:MAX_SUSTAINED_GENES]
+growth_genes = resolve_genes(expression_df.index, growth_raw_genes)
+immune_genes = resolve_genes(expression_df.index, immune_raw_genes)
 
 if len(immune_genes) < 10:
 	raise ValueError(f"Need >=10 immune-evasion genes, found {len(immune_genes)}.")
-if len(sustained_genes) < 10:
-	raise ValueError(f"Need >=10 sustained-signaling genes, found {len(sustained_genes)}.")
+if len(growth_genes) < 10:
+	raise ValueError(f"Need >=10 sustained-signaling genes, found {len(growth_genes)}.")
 
-genes_of_interest = list(dict.fromkeys(immune_genes + sustained_genes))
+genes_of_interest = list(dict.fromkeys(immune_genes + growth_genes))
 
 # Reduce expression matrix to selected samples (columns) and selected genes (rows)
 reduced_expression = expression_df.loc[genes_of_interest, subset_metadata.index]
@@ -90,14 +79,14 @@ umap_df = umap_df.join(subset_metadata[["cancer_type"]])
 
 # Project-relevant coloring features
 umap_df["immune_hallmark_mean"] = X[immune_genes].mean(axis=1)
-umap_df["sustained_hallmark_mean"] = X[sustained_genes].mean(axis=1)
+umap_df["sustained_hallmark_mean"] = X[growth_genes].mean(axis=1)
 key_gene = "EGFR" if "EGFR" in X.columns else immune_genes[0]
 umap_df["key_gene_expression"] = X[key_gene]
 
 print("Samples retained:", X.shape[0])
 print("Cancer type included:", target_cancer_type)
 print("Immune-evasion genes used:", len(immune_genes))
-print("Sustained-signaling genes used:", len(sustained_genes))
+print("Sustained-signaling genes used:", len(growth_genes))
 print("Total unique genes used:", len(genes_of_interest))
 print("Key gene for coloring:", key_gene)
 
