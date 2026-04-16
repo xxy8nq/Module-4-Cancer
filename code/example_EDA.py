@@ -73,6 +73,9 @@ raw_gene_list = [
     "ATM",
 ]
 
+hallmarks = pd.read_table("/Users/megansullivan/Desktop/Comp BME/Module-4-Cancer/Menyhart_JPA_CancerHallmarks_core.txt", header=None, index_col=0)
+
+
 # Extract gene names. If 'BRCA1/2' is in there, split it into two.
 desired_gene_list = []
 for gene in raw_gene_list:
@@ -80,6 +83,8 @@ for gene in raw_gene_list:
         desired_gene_list.extend(gene.split('/'))
     else:
         desired_gene_list.append(gene)
+
+
 
 # .loc[] is the method to subset by index labels
 # .iloc[] will subset by index position (integer location) instead

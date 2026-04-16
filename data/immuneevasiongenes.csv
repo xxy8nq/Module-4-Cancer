@@ -1,22 +1,18 @@
-# Data extracted from the provided genetic pathway diagram
-gene_data = [
-    ["Gene Name", "Category", "Primary Mechanism", "Immune Outcome"],
-    ["MYC", "Oncogene", "PD-L1 up-regulation", "Immune suppression"],
-    ["RAS", "Oncogene", "CD47 up-regulation", "T-cell inhibition"],
-    ["EGFR", "Oncogene", "PD-L1 transcription", "Immune suppression"],
-    ["PIK3CA", "Oncogene", "Immunosuppressive factors in TME", "Inhibits T-cell recruitment"],
-    ["BRAF", "Oncogene", "PD-L1 up-regulation", "Immune evasion"],
-    ["HER2", "Oncogene", "PD-L1 up-regulation", "Reduced T-cell activation"],
-    ["CTNNB1", "Oncogene", "Reduced Dendritic cell recruitment", "Reduced immune response"],
-    ["STAT3", "Oncogene", "PD-L1 and immunosuppressive cytokines", "Immune evasion"],
-    ["PTEN", "Tumor Suppressor", "PI3K activation", "Reduced T-cell infiltration"],
-    ["TP53", "Tumor Suppressor", "PD-L1 up-regulation", "Immunosuppressive environment"],
-    ["RB1", "Tumor Suppressor", "Increased immunosuppressive factors", "Reduced immune cell recruitment"],
-    ["APC", "Tumor Suppressor", "Wnt/beta-catenin pathway activation", "Reduced T-cell infiltration"],
-    ["BRCA1/2", "Tumor Suppressor", "MDSC and Treg recruitment", "Reduced immune response"],
-    ["STK11", "Tumor Suppressor", "Increased immunosuppressive cytokines", "Blocks immune cell infiltration"],
-    ["SMAD4", "Tumor Suppressor", "TGF-beta up-regulation", "Regulatory T-cells and MDSCs recruitment"],
-    ["ATM", "Tumor Suppressor", "Down-regulation of immune pathways", "Reduced DNA-damage-related immune response"]
+# Sustaining Proliferative Signaling (Sustained Growth)
+# Extracted from your list (subset for high relevance to LUAD)
+growth_genes = [
+    "EGFR", "KRAS", "NRAS", "HRAS", "BRAF", "MYC", "ERBB2", "ERBB3", "MET", 
+    "PIK3CA", "PIK3CB", "PIK3R1", "AKT1", "AKT2", "MTOR", "MAPK1", "MAPK3", 
+    "CCND1", "CDK4", "CDK2", "SOS1", "GRB2", "RAF1", "FGFR1", "PDGFA"
 ]
 
-filename = "cancer_genes_immune_evasion.csv"
+# Evading Immune Destruction (Immune Evasion)
+# Extracted from your list
+immune_genes = [
+    "CD274", "PDCD1", "CTLA4", "LAG3", "HAVCR2", "IDO1", "STAT1", "STAT3",
+    "HLA-A", "HLA-B", "B2M", "JAK1", "JAK2", "IFNGR1", "IL6", "CD80", "CD86",
+    "PTPN6", "LCK", "ZAP70", "CBL", "CBLB", "TRAF6", "PRKCB", "VAV1"
+]
+
+# Combined list for analysis
+project_gene_list = list(set(growth_genes + immune_genes))
