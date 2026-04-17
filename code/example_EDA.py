@@ -52,7 +52,7 @@ LUAD_data = data[cancer_samples]
 
 # %%
 # Subset by index (genes)
-####################################################
+####################################################w
 # This file is a small text artifact, not a real CSV, so we keep the gene list explicit.
 raw_gene_list = [
     "MYC",
