@@ -1,0 +1,19 @@
+# Sustaining Proliferative Signaling (Sustained Growth)
+# Extracted from your list (subset for high relevance to LUAD)
+growth_genes = [
+    "EGFR", "KRAS", "NRAS", "HRAS", "BRAF", "MYC", "ERBB2", "ERBB3", "MET", 
+    "PIK3CA", "PIK3CB", "PIK3R1", "AKT1", "AKT2", "MTOR", "MAPK1", "MAPK3", 
+    "CCND1", "CDK4", "CDK2", "SOS1", "GRB2", "RAF1", "FGFR1", "PDGFA"
+]
+
+# Evading Immune Destruction (Immune Evasion)
+# Extracted from your list
+immune_genes = [
+    "CD274", "PDCD1", "CTLA4", "LAG3", "HAVCR2", "IDO1", "STAT1", "STAT3",
+    "HLA-A", "HLA-B", "B2M", "JAK1", "JAK2", "IFNGR1", "IL6", "CD80", "CD86",
+    "PTPN6", "LCK", "ZAP70", "CBL", "CBLB", "TRAF6", "PRKCB", "VAV1"
+]
+
+# Combined list for analysis
+project_gene_list = list(set(growth_genes + immune_genes))
+print(len(project_gene_list), "genes selected for analysis.")
