@@ -45,13 +45,13 @@ if target_cancer_type not in metadata_df["cancer_type"].unique():
 subset_metadata = metadata_df[metadata_df["cancer_type"] == target_cancer_type].copy()
 
 # Hallmark genes loaded directly from the CSV-style python artifact.
-gene_namespace = runpy.run_path(str(DATA_DIR / "immuneevasiongenes.csv"))
+gene_namespace = runpy.run_path(str(DATA_DIR / "genes.csv"))
 growth_raw_genes = gene_namespace.get("growth_genes", [])
 immune_raw_genes = gene_namespace.get("immune_genes", [])
 
 if not growth_raw_genes or not immune_raw_genes:
 	raise ValueError(
-		"Expected growth_genes and immune_genes in data/immuneevasiongenes.csv."
+		"Expected growth_genes and immune_genes in data/genes.csv."
 	)
 
 growth_genes = resolve_genes(expression_df.index, growth_raw_genes)
