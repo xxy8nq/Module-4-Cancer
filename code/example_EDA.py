@@ -73,7 +73,9 @@ raw_gene_list = [
     "ATM",
 ]
 
-hallmarks = pd.read_table("/Users/megansullivan/Desktop/Comp BME/Module-4-Cancer/Menyhart_JPA_CancerHallmarks_core.txt", header=None, index_col=0)
+from pathlib import Path
+repo_root = Path.cwd() if (Path.cwd() / "data").exists() else Path.cwd().parent
+hallmarks = pd.read_table(repo_root / "Menyhart_JPA_CancerHallmarks_core.txt", header=None, index_col=0)
 
 
 # Extract gene names. If 'BRCA1/2' is in there, split it into two.

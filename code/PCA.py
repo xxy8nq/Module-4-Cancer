@@ -6,7 +6,8 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 # 1. SETUP PATHS
-DATA_DIR = Path("/Users/megansullivan/Desktop/Comp BME/Module-4-Cancer/data")
+repo_root = Path.cwd() if (Path.cwd() / "data").exists() else Path.cwd().parent
+DATA_DIR = repo_root / "data"
 
 # 2. LOAD DATA
 data = pd.read_csv(DATA_DIR / "TRAINING_SET_GSE62944_subsample_log2TPM.csv", index_col=0)

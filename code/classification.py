@@ -4,10 +4,15 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, ConfusionMatrixDisplay
 from sklearn.tree import plot_tree
 import matplotlib.pyplot as plt
+from pathlib import Path
+
+# Setup paths
+repo_root = Path.cwd() if (Path.cwd() / "data").exists() else Path.cwd().parent
+data_dir = repo_root / "data"
 
 # Load datasets
-hallmarks = pd.read_csv('/Users/megansullivan/Desktop/Comp BME/Module-4-Cancer/data/umap_lung_hallmarks.csv')
-metadata = pd.read_csv('/Users/megansullivan/Desktop/Comp BME/Module-4-Cancer/data/TRAINING_SET_GSE62944_metadata.csv')
+hallmarks = pd.read_csv(data_dir / "umap_lung_hallmarks.csv")
+metadata = pd.read_csv(data_dir / "TRAINING_SET_GSE62944_metadata.csv")
 
 # Merge hallmark means with clinical data on the sample ID
 df = pd.merge(hallmarks, metadata[['sample', 'tumor_status']], left_on='sample', right_on='sample')
