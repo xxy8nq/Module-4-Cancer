@@ -1,5 +1,9 @@
 from pathlib import Path
 import runpy
+import warnings
+
+# Suppress tqdm warnings
+warnings.filterwarnings("ignore", message=".*IProgress not found.*")
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -71,7 +75,7 @@ reduced_expression = expression_df.loc[genes_of_interest, subset_metadata.index]
 X = reduced_expression.T.copy()
 X_scaled = StandardScaler().fit_transform(X)
 
-reducer = umap.UMAP(n_neighbors=15, min_dist=0.15, metric="euclidean", random_state=42)
+reducer = umap.UMAP(n_neighbors=15, min_dist=0.15, metric="euclidean", random_state=42, n_jobs=None)
 embedding = reducer.fit_transform(X_scaled)
 
 umap_df = pd.DataFrame(embedding, index=X.index, columns=["UMAP1", "UMAP2"])
