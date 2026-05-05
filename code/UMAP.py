@@ -75,7 +75,9 @@ reduced_expression = expression_df.loc[genes_of_interest, subset_metadata.index]
 X = reduced_expression.T.copy()
 X_scaled = StandardScaler().fit_transform(X)
 
-reducer = umap.UMAP(n_neighbors=15, min_dist=0.15, metric="euclidean", random_state=42, n_jobs=None)
+# Ensure `n_jobs` is an integer (some umap versions raise if it's None).
+# Use `n_jobs=1` for deterministic behaviour; change to -1 to use all cores.
+reducer = umap.UMAP(n_neighbors=15, min_dist=0.15, metric="euclidean", random_state=42, n_jobs=1)
 embedding = reducer.fit_transform(X_scaled)
 
 umap_df = pd.DataFrame(embedding, index=X.index, columns=["UMAP1", "UMAP2"])
